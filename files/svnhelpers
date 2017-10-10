@@ -1,0 +1,140 @@
+#!/bin/bash
+
+function add_diff_color() {
+  if type colordiff > /dev/null 2>&1; then
+    colordiff $@
+  else
+    tee $@
+  fi
+}
+
+function add_file_status_color() {
+  awk '
+  {
+    if ($1=="C") {
+      print "\033[35m" $0 "\033[00m";
+    }
+    else if ($1=="A") {
+      print "\033[32m" $0 "\033[00m";
+    }
+    else if ($1=="?") {
+      print "\033[36m" $0 "\033[00m";
+    }
+    else if ($1=="D") {
+      print "\033[31m" $0 "\033[00m";
+    }
+    else {
+      print $0;
+    }
+  }';
+}
+
+function svn_whatchanged() {
+  command svn log -v | add_file_status_color | less -R
+}
+
+function svn_cat() {
+  command svn cat -r $1 $2 | less -R
+}
+
+function svn_diff() {
+  command svn diff $@ | add_diff_color | less -R
+}
+
+function svn_show() {
+  svn_diff -c $@
+}
+
+function svn_log() {
+  command svn log $@ | less -R
+}
+
+function svn_st() {
+  command svn st $@ | add_file_status_color
+}
+
+function svn_up() {
+  command svn up $@ | add_file_status_color
+}
+
+function svn_revert-rev() {
+  command svn diff -c $@ . | patch -R -p0
+}
+
+function svn_stash() {
+  mkdir -p .svn/stash
+  local stash_file=stash_`date | tr ' ' '_' | tr ':' '_'`
+
+  case $1 in
+    "list")
+      ls -1t .svn/stash
+      return
+      ;;
+    "show")
+      file_to_show=${2-`ls -1t .svn/stash/ | head -1`}
+      cat .svn/stash/$file_to_show | add_diff_color | less -R
+      return
+      ;;
+    "pop")
+      shift
+      svn_pop $@
+      return
+      ;;
+    "--alias")
+      stash_file=$2
+      shift 2
+      ;;
+  esac
+
+  files=$@
+  [ -z $files ] && files="."
+
+  diff=`command svn diff $files`
+  [ -z $diff ] && echo 'There are no changes to be stashed' && return
+
+  echo $diff > .svn/stash/$stash_file
+
+  # should do this just for files matcginf $files
+  for file in `svn status | grep "^A" | awk '{ print $2 }'`; do rm -R $file; done
+  svn revert -R $files
+}
+
+function svn_pop() {
+  local stash_file=""
+
+  if [ ! -z $1 ]; then
+    if [ -e .svn/stash/$1 ]; then
+      stash_file=$1
+    else
+      echo "Not a valid stash file (check .svn/stash)"
+      return
+    fi
+  else
+    stash_file=`ls -1t .svn/stash | head -1`
+  fi
+
+  [ -z $stash_file ] && echo 'There is nothing stashed (check .svn/stash for stash files)' && return
+
+  stash_file=.svn/stash/$stash_file
+  command svn patch $stash_file && rm $stash_file
+}
+
+function svn_authors() {
+  command svn log -v --xml |
+    grep '<author.*/author>' |
+    sort $* |
+    uniq -c |
+    sort -rn |
+    sed -e "s/\<author\>//g" |
+    sed -e "s/\<\/author\>//g"
+}
+
+function svn() {
+  cmd=$1;
+  if type "svn_"$cmd > /dev/null 2>&1; then
+    shift
+    "svn_"$cmd $@
+  else
+    command svn $@
+  fi
+}

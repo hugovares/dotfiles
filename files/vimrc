@@ -1,0 +1,39 @@
+execute pathogen#infect()
+
+" Use vim settings, rather then vi settings (much better!)
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+syntax on
+colorscheme desert
+
+" Display line numbers on the left
+set number
+
+set showmatch   " set show matching parenthesis
+
+" Enable use of the mouse for all modes
+set mouse=a
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Ignore case when searching
+set ignorecase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+map <space> /
+map <c-space> ?
+
+filetype plugin indent on
+
+let g:NERDTreeWinPos = "left"

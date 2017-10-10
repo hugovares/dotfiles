@@ -1,0 +1,8 @@
+log
+.metadata
+tmp
+node_modules
+generated
+concat
+_bower
+test_out

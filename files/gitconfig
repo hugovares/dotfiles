@@ -1,0 +1,28 @@
+[user]
+  name = Hugo Vares Vieira
+  email = hugo_vieira@gap.com
+[color]
+  status = auto
+  branch = auto
+  interactive = auto
+  diff = auto
+[alias]
+  l = "!source ~/.githelpers && pretty_git_log"
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+  ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
+  ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative 
+  svn-pull = svn rebase
+  svn-push = svn dcommit
+[merge]
+  tool = vimdiff
+[core]
+  excludesfile = /Users/hvares/.gitignore
+[init]
+  templatedir = ~/.git_template
+[push]
+  default = matching
+[rerere]
+	enabled = 1
+[http]
+	sslVerify = false

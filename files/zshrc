@@ -1,0 +1,160 @@
+# Fix to use tmux, rvm and zsh
+if [ -x /usr/libexec/path_helper ]
+then
+  eval `/usr/libexec/path_helper -s`
+fi
+
+
+export PATH="/usr/local/bin:$PATH"
+
+export ZSH=$HOME/.oh-my-zsh
+[ -e $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh && source ~/.prose.zsh-theme
+
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+alias upgrade="brew update && brew upgrade && brew cleanup -s --force && upgrade_oh_my_zsh"
+alias ez="vim ~/.zshrc"
+alias v="vim ~/.vim/vimrc"
+alias vi="vim"
+alias reload="exec $SHELL --login"
+alias e="exit"
+alias :q="exit"
+alias r="rails"
+alias va="vagrant"
+alias be="bundle exec"
+alias eh="sudo vim /etc/hosts"
+alias l="ls -lha"
+alias lr="lein run"
+alias tmux="TERM=screen-256color-bce tmux"
+alias todo="vim ~/Dropbox/.todo"
+
+# git
+alias g="git"
+alias ga="git add -A"
+alias gb="git branch"
+alias gs="git status"
+alias gl="git l -30"
+alias glm="git l --author=Hugo"
+alias gl1="git l1"
+alias gk="gitk &"
+alias gc="git commit"
+alias gch="git checkout"
+alias gp="git push"
+alias gd="git diff"
+alias gr="git reflog"
+alias gdc="git diff --cached"
+alias gt="git tag"
+alias gm="git merge"
+
+# pg
+alias pg_start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
+alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
+
+# mysql
+alias mysql_start="mysql.server start"
+alias mysql_stop="mysql.server stop"
+
+# redis
+alias redis_start="redis-server /usr/local/etc/redis.conf"
+
+# memcache
+alias memcache_start="/usr/local/opt/memcached/bin/memcached"
+
+man() {
+  PAGER="/bin/sh -c \"col -b | vim -R -c 'set ft=man' -\"" command man $@
+}
+
+cale() {
+  year=$(date | awk '{print $6}')
+  cal $1 $year
+}
+
+showp() {
+  lsof -i tcp:$1
+}
+
+# kills every process running on a given port
+killp() {
+  OLD_IFS=$IFS;
+
+  lsof -i :$1 | grep TCP | while IFS= read -r line ; do
+    kill -9 `echo $line | awk '{ print $2 }'`;
+    echo `echo $line | awk '{ print $1 }'`" killed";
+  done
+
+  IFS=$OLD_IFS;
+}
+
+hr() {
+  line=$(printf "%-`tput cols`s" "*");
+  echo ${line// /*};
+}
+
+ff() {
+  find_type "f" $@
+}
+
+fl() {
+  find_type "l" $@
+}
+
+fd() {
+  find_type "d" $@
+}
+
+find_type() {
+  search_type=$1
+  name=$2
+  shift 2
+  find . -type $search_type -iname "*$name*" $@
+}
+
+pa() {
+  ps aux | ag -i $1
+}
+
+java6() {
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"
+}
+
+java7() {
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home"
+}
+
+java8() {
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"
+}
+
+remote_debug_gradle() {
+  port=${1-8080}
+  export GRADLE_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=$port,server=y,suspend=n"
+}
+
+ip() {
+  ifconfig -a | grep inet | grep broadcast | awk '{ print $2 }'
+}
+
+size() {
+  du -sh $@
+}
+
+dash() {
+  docset=$1
+  query=$2
+  open dash://$docset:$query
+}
+
+[ -e ~/.zshrc-private ] && source ~/.zshrc-private
+[ -e ~/.z.sh ] && source ~/.z.sh
+[ -e ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -e ~/.svnhelpers ] && source ~/.svnhelpers
+
+
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+export NVM_DIR=~/.nvm
+  . $(brew --prefix nvm)/nvm.sh
