@@ -1,6 +1,6 @@
 [user]
   name = Hugo Vares Vieira
-  email = hugo_vieira@xxxx
+  email = hugovares@gmail.com
 [color]
   status = auto
   branch = auto
@@ -17,7 +17,7 @@
 [merge]
   tool = vimdiff
 [core]
-  excludesfile = /Users/hvares/.gitignore
+  excludesfile = /Users/hugovares/.gitignore
 [init]
   templatedir = ~/.git_template
 [push]

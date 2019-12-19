@@ -116,15 +116,27 @@ pa() {
 }
 
 java6() {
-  export JAVA_HOME="/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"
+  echo 'Not installed'
 }
 
 java7() {
-  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home"
+  echo 'Not installed'
 }
 
 java8() {
-  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+}
+
+java10() {
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-10.jdk/Contents/Home"
+}
+
+java11() {
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
+}
+
+java13() {
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-13.0.1.jdk/Contents/Home"
 }
 
 remote_debug_gradle() {
