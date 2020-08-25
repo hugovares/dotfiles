@@ -136,7 +136,7 @@ java11() {
 }
 
 java13() {
-  export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-13.0.1.jdk/Contents/Home"
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-13.0.2.jdk/Contents/Home"
 }
 
 remote_debug_gradle() {
