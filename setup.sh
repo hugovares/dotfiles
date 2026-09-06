@@ -105,6 +105,9 @@ set_zsh_as_default_shell() {
   fi
 }
 
+if [ `uname` != "Linux" ]; then
+  ensure_homebrew
+fi
 install_zsh
 install_oh_my_zsh
 source_dotfiles
