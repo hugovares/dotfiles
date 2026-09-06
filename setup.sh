@@ -13,12 +13,8 @@ print_error() {
 }
 
 install_tool() {
-  if [ `uname` = "Linux" ]; then
-    sudo apt-get install $@;
-  else
-    ensure_homebrew;
-    brew install $@;
-  fi
+  ensure_homebrew;
+  brew install $@;
 }
 
 ensure_homebrew() {
@@ -105,9 +101,7 @@ set_zsh_as_default_shell() {
   fi
 }
 
-if [ `uname` != "Linux" ]; then
-  ensure_homebrew
-fi
+ensure_homebrew
 install_zsh
 install_oh_my_zsh
 source_dotfiles

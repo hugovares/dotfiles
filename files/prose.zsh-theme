@@ -17,15 +17,9 @@ git_prompt_info () {
 }
 
 
-if [ `uname` = "Linux" ]; then
-PROMPT='
-(linux) %{$fg_bold[yellow]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
-$(virtualenv_info)$ '
-else
 PROMPT='
 %{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}$(git_prompt_info)
 $(virtualenv_info)$ '
-fi
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[black]%} ("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
