@@ -16,7 +16,23 @@ install_tool() {
   if [ `uname` = "Linux" ]; then
     sudo apt-get install $@;
   else
+    ensure_homebrew;
     brew install $@;
+  fi
+}
+
+ensure_homebrew() {
+  if type brew > /dev/null 2>&1; then
+    return
+  fi
+
+  print_message "\nHomebrew not found. Installing it."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  if [ -d /opt/homebrew/bin ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -d /usr/local/bin ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
   fi
 }
 
@@ -58,7 +74,7 @@ install_oh_my_zsh() {
     fi
   fi
 
-  curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
   if [ -d ~/.oh-my-zsh ]; then
     print_message "Oh-my-zsh installed (~/.oh-my-zsh)."
