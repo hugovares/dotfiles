@@ -168,5 +168,7 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
+export export PATH="$HOME/.local/bin:$PATH"" # Add ~/.local/bin to PATH for scripting
+
 export NVM_DIR=~/.nvm
   . $(brew --prefix nvm)/nvm.sh
